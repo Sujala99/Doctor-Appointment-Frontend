@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import for navigation
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../../../components/sidebar";
 import Swal from "sweetalert2";
+import { FiMenu } from 'react-icons/fi';
 
 function AddDoctor() {
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [doctor, setDoctor] = useState({
     fullName: "",
@@ -76,7 +78,7 @@ function AddDoctor() {
           Swal.fire({
             icon: "success",
             title: "Doctor Added Successfully",
-            timer: 2000, // Auto-close after 2 seconds
+            timer: 2000,
             showConfirmButton: false,
           }).then(() => {
             setDoctor({
@@ -92,8 +94,8 @@ function AddDoctor() {
               experience: "",
               fees: "",
               availableSlots: "",
-            }); // Clear form
-            navigate("/viewDoctor"); // Redirect to viewDoctor
+            });
+            navigate("/viewDoctor");
           });
         }
       })
@@ -109,9 +111,17 @@ function AddDoctor() {
 
   return (
     <div className="flex h-screen">
+      {/* Hamburger Menu for Mobile */}
+      <div
+        className="fixed top-0 left-0 z-50 p-4 sm:hidden"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <FiMenu className="text-white text-3xl" />
+      </div>
+
       {/* Sidebar */}
       <div className="w-64 flex-shrink-0">
-        <Sidebar />
+        <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       </div>
 
       {/* Main Content */}

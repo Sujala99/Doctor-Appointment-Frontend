@@ -8,8 +8,7 @@ import {
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-function Sidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const [isPatientDropdownOpen, setIsPatientDropdownOpen] = useState(false);
   const [isDoctorDropdownOpen, setIsDoctorDropdownOpen] = useState(false);
 
@@ -17,9 +16,9 @@ function Sidebar() {
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 w-64 h-full bg-purple-700 text-white transition-transform ${
+        className={`fixed top-0 left-0 z-40 w-64 h-full bg-purple-700 text-white transition-transform sm:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0`}
+        }`}
       >
         <div className="h-full p-4">
           <h2 className="text-2xl font-bold mb-6">Admin Panel</h2>
@@ -129,19 +128,17 @@ function Sidebar() {
               </button>
             </li>
             <li>
-              <Link to= "/logout">
-              <button className="flex items-center p-3 w-full rounded-lg hover:bg-purple-600">
-                <FiLogOut className="text-2xl" />
-                <span className="ml-3">Logout</span>
-              </button>
+              <Link to="/logout">
+                <button className="flex items-center p-3 w-full rounded-lg hover:bg-purple-600">
+                  <FiLogOut className="text-2xl" />
+                  <span className="ml-3">Logout</span>
+                </button>
               </Link>
-             
             </li>
           </ul>
         </div>
       </aside>
-
-         </div>
+    </div>
   );
 }
 
