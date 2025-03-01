@@ -115,10 +115,10 @@ function Sidebar() {
 
             {/* Other Sidebar Items */}
             <li>
-              <Link to="/addBlog">
+              <Link to="/blogpage">
                 <button className="flex items-center p-3 w-full rounded-lg hover:bg-purple-600">
                   <FiFileText className="text-2xl" />
-                  <span className="ml-3">Add Blog</span>
+                  <span className="ml-3"> Blog</span>
                 </button>
               </Link>
             </li>
@@ -129,10 +129,13 @@ function Sidebar() {
               </button>
             </li>
             <li>
+              <Link to= "/logout">
               <button className="flex items-center p-3 w-full rounded-lg hover:bg-purple-600">
                 <FiLogOut className="text-2xl" />
                 <span className="ml-3">Logout</span>
               </button>
+              </Link>
+             
             </li>
           </ul>
         </div>

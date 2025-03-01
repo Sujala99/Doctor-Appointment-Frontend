@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Card from "../../../components/card";
 import Nav from "../../../components/navbar";
+import Footer from "../../../components/footer"; // Corrected path
+import React from "react";
 
 function Doctor() {
   const [doctors, setDoctors] = useState([]);
@@ -41,6 +43,7 @@ function Doctor() {
             </div>
       
     </div>
+    <Footer/>
 
     </div>
     

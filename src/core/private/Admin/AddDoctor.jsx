@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import for navigation
 import Sidebar from "../../../components/sidebar";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 function AddDoctor() {
+  const navigate = useNavigate(); // Hook for navigation
+
   const [doctor, setDoctor] = useState({
     fullName: "",
     email: "",
@@ -11,7 +14,7 @@ function AddDoctor() {
     phoneNumber: "",
     address: "",
     gender: "",
-    dob: "",  // Use dob instead of age
+    dob: "",
     specialization: "",
     experience: "",
     fees: "",
@@ -28,10 +31,9 @@ function AddDoctor() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    const token = localStorage.getItem('token');  // Get token from localStorage
-  
-    // Prepare the doctor data from the form state
+
+    const token = localStorage.getItem("token");
+
     const doctorData = {
       username: doctor.username,
       email: doctor.email,
@@ -39,21 +41,19 @@ function AddDoctor() {
       password: doctor.password,
       phonenumber: doctor.phoneNumber,
       gender: doctor.gender,
-      dob: doctor.dob,  // Pass the actual date of birth here
+      dob: doctor.dob,
       specialization: doctor.specialization,
-      qualification: doctor.qualification,
       experience: doctor.experience,
       fees: doctor.fees,
       availableSlots: doctor.availableSlots,
-      description: doctor.description || '',  // Ensure description is available
+      description: doctor.description || "",
     };
-  
-    // Send data to backend API
-    fetch('http://localhost:4000/doctors/addDoctor', {
-      method: 'POST',
+
+    fetch("http://localhost:4000/doctors/addDoctor", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`,  // Ensure you're sending the JWT token for authentication
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(doctorData),
     })
@@ -76,9 +76,25 @@ function AddDoctor() {
           Swal.fire({
             icon: "success",
             title: "Doctor Added Successfully",
+            timer: 2000, // Auto-close after 2 seconds
+            showConfirmButton: false,
+          }).then(() => {
+            setDoctor({
+              fullName: "",
+              email: "",
+              username: "",
+              password: "",
+              phoneNumber: "",
+              address: "",
+              gender: "",
+              dob: "",
+              specialization: "",
+              experience: "",
+              fees: "",
+              availableSlots: "",
+            }); // Clear form
+            navigate("/viewDoctor"); // Redirect to viewDoctor
           });
-          // Optionally navigate to another page after successful submission
-          navigate("/viewDoctor");
         }
       })
       .catch((error) => {
@@ -90,11 +106,10 @@ function AddDoctor() {
         });
       });
   };
-  
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar - Fixed on Left */}
+      {/* Sidebar */}
       <div className="w-64 flex-shrink-0">
         <Sidebar />
       </div>

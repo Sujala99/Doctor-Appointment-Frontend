@@ -1,10 +1,10 @@
 
-function  Message(){
-    return(
-        <div>
-        Add Blog
-        </div>
-    );
-}
+// function  Message(){
+//     return(
+//         <div>
+//         Add Blog
+//         </div>
+//     );
+// }
 
-export default Message;
+// export default Message;

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-
+import React from 'react';
 // Create UserContext with default values
 const UserContext = createContext({
   user: null,
@@ -15,21 +15,21 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setUser(JSON.parse(storedUser)); // Load user from localStorage if available
     }
   }, []);
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user)); // Save user to localStorage when it changes
     } else {
-      localStorage.removeItem('user');
+      localStorage.removeItem('user'); // Remove user from localStorage if no user
     }
   }, [user]);
 
   const unsetUser = () => {
-    setUser(null);
-    localStorage.removeItem('user'); // Clear stored user data
+    setUser(null); // Clear the user from the state
+    localStorage.removeItem('user'); // Clear the user from localStorage
   };
 
   return (

@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logoimg from "../assets/images/logo.png";
-import { Link } from "react-router-dom"; // Use Link for client-side routing
+import { Link } from "react-router-dom";
+import { useUserContext } from "../userContext"; // Import useUserContext hook
 
-function NavBar({ isLoggedIn, userRole }) {
+function NavBar() {
+  const { user } = useUserContext(); // Access user data from context
+  const isLoggedIn = !!user; // Check if the user is logged in
+  const userRole = user?.role; // Get the user's role
+
+  const [profile, setProfile] = useState(null); // Initialize profile as null until fetched
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false); // State for dropdown visibility
+  const token = localStorage.getItem("token"); // Assuming you have a token in local storage
+
+  useEffect(() => {
+    if (token) {
+      fetch("http://localhost:4000/users/profile", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setProfile(data)) // Set the whole data as profile
+        .catch((err) => console.error("Error fetching profile:", err));
+    }
+  }, [token]);
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
   return (
     <nav className="navbar bg-base-100 px-4 lg:px-8">
       {/* Navbar Start */}
@@ -31,15 +59,40 @@ function NavBar({ isLoggedIn, userRole }) {
             tabIndex={0}
             className="menu dropdown-content bg-base-100 rounded-box shadow mt-3 w-52 p-2 z-10"
           >
+            {/* Conditional Rendering for User Role */}
             <li><Link to="/home">Home</Link></li>
-            {isLoggedIn && data.user.role === "user"&& (
-              <li><Link to="/doctor">Doctor</Link></li>
+            
+            {userRole === "user" && (
+              <>
+                <li><Link to="/doctor">Doctor</Link></li>
+                <li><Link to="/message">Chat</Link></li>
+              </>
             )}
-            {isLoggedIn && (
-              <li><Link to="/message">Message</Link></li>
+            {userRole === "doctor" && (
+              <>
+                <li><Link to="/appointment">Appointment</Link></li>
+                <li><Link to="/message">Chat</Link></li>
+              </>
             )}
+            
+            {/* Common items */}
             <li><Link to="/blog">Blog</Link></li>
-            <li><Link to="#contact">Contact Us</Link></li>
+            <li>
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                Contact Us
+              </a>
+            </li>
+
+            {/* Profile */}
+            {isLoggedIn && (
+              <li><Link to="/profile">Profile</Link></li>
+            )}
           </ul>
         </div>
       </div>
@@ -47,15 +100,36 @@ function NavBar({ isLoggedIn, userRole }) {
       {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal space-x-4">
+          {/* Conditional Rendering for User Role */}
           <li><Link to="/home">Home</Link></li>
-          {isLoggedIn && data.user.role === "user" && (
-            <li><Link to="/doctor">Doctor</Link></li>
+
+          {userRole === "user" && (
+            <>
+              <li><Link to="/doctor">Doctor</Link></li>
+              <li><Link to="/message">Chat</Link></li>
+              <li><Link to="/viewappointments">Appointments</Link></li> 
+            </>
           )}
-          {isLoggedIn && (
-            <li><Link to="/message">Message</Link></li>
+          {userRole === "doctor" && (
+            <>
+              <li><Link to="/doctor/viewAppointment">Appointment</Link></li>
+              <li><Link to="/chat">Chat</Link></li>
+            </>
           )}
+
+          {/* Common items */}
           <li><Link to="/blog">Blog</Link></li>
-          <li><Link to="#contact">Contact Us</Link></li>
+          <li>
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('contact')?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Contact Us
+            </a>
+          </li>
         </ul>
       </div>
 
@@ -64,8 +138,9 @@ function NavBar({ isLoggedIn, userRole }) {
         {isLoggedIn ? (
           <div className="dropdown dropdown-end">
             <button tabIndex={0} className="btn btn-ghost btn-circle">
+              {/* Use the actual profile image if available */}
               <img
-                src="https://via.placeholder.com/40"
+                src={profile?.image ? `http://localhost:4000/uploads/${profile.image}` : "https://via.placeholder.com/40"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />
@@ -76,6 +151,7 @@ function NavBar({ isLoggedIn, userRole }) {
             >
               <li><Link to="/profile">Profile</Link></li>
               <li><Link to="/logout">Logout</Link></li>
+              <li><Link to="/viewappointments">Appointments</Link></li>
             </ul>
           </div>
         ) : (
@@ -87,4 +163,3 @@ function NavBar({ isLoggedIn, userRole }) {
 }
 
 export default NavBar;
-

@@ -1,23 +1,47 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function Card({ doctor }) {
-    return (
-      <div className="bg-white w-[650px] shadow-md hover:shadow-lg transition-all p-5 rounded-lg relative">
-        <div className="flex">
-          <div className="w-2/5 p-5 text-center">
-            <img className="max-h-60 mx-auto" src={doctor.image } alt={doctor.image} />
-          </div>
-          <div className="w-3/5 p-5 border-l-2 border-gray-200">
-            <h2 className="text-lg font-semibold uppercase text-gray-700">{doctor.fullname}</h2>
-            <h4 className="text-xs uppercase text-gray-500">{doctor.specialization}</h4>
-            <h4 className="text-xs uppercase text-gray-500">{doctor.experience} years experience</h4>
-            <h1 className="text-2xl font-light text-gray-700 pt-4">Rs.{doctor.fees}</h1>
-            <p className="text-xs text-gray-500 pt-4">{doctor.description}</p>
-            <div className="mt-5">
-              <button className="border border-gray-300 text-gray-700 uppercase text-xs px-5 py-2 mr-2 transition-all hover:border-green-400 hover:text-green-400">Add to Cart</button>
-              <button className="border border-gray-300 text-gray-700 uppercase text-xs px-5 py-2 transition-all hover:border-green-400 hover:text-green-400">Wishlist</button>
-            </div>
-          </div>
+  const navigate = useNavigate();
+
+  const handleBookAppointment = () => {
+    navigate(`/appointments/${doctor._id}`, { state: { doctor } });
+  };
+
+  return (
+    <div className=" bg-black-100 w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg hover:shadow-xl transition-all p-10 rounded-2xl flex flex-col sm:flex-row gap-6 border border-gray-200">
+      {/* Doctor Image */}
+      <div className="w-full sm:w-2/5 flex justify-center">
+        <img
+          className="h-32 w-32 object-cover rounded-full border-4 border-[#7E3F98]"
+          src={`http://localhost:4000/uploads/${doctor.image}`}
+          alt={doctor.fullname}
+        />
+      </div>
+
+      {/* Doctor Info */}
+      <div className="w-full sm:w-3/5 flex flex-col justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-gray-800">{doctor.fullname}</h2>
+          <h4 className="text-sm text-gray-600">{doctor.specialization}</h4>
+          <p className="text-sm text-gray-500">{doctor.experience} years experience</p>
+          <h3 className="text-lg font-semibold text-[#7E3F98] mt-2">Rs. {doctor.fees}</h3>
+          <p className="text-xs text-gray-500 mt-2">{doctor.description}</p>
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-4 flex gap-3">
+          <button
+            onClick={handleBookAppointment}
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-600 mt-4"
+          >
+            Book Appointment
+          </button>
+          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-600 mt-4">
+            Message
+          </button>
         </div>
       </div>
-    );
-  }
-  
+    </div>
+  );
+}

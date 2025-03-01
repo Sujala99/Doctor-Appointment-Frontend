@@ -138,7 +138,7 @@ const ViewUsers = () => {
                   <div className="bg-white p-5 rounded-lg shadow-lg w-1/3">
                     <h2 className="text-xl font-bold mb-4">Edit User</h2>
                     <div className="grid grid-cols-2 gap-4">
-                      {["username", "phonenumber", "fullname", "dob","addres","Role", "gender", "email", ].map((field) => (
+                      {["username", "phonenumber", "fullname", "dob","address","Role", "gender", "email", ].map((field) => (
                         <input
                           key={field}
                           type={field === "dob" ? "date" : "text"}
