@@ -1,25 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import NavBar from "../../components/navbar";
 import Footer from "../../components/footer";
 import ProfessionalCard from "../../components/ProfessionalCard";
 import Carousel from "../../components/carousel";
+import docf1 from "../../assets/images/docf1.png";
+import docf2 from "../../assets/images/2.jpeg"; // Fixed incorrect filename
+import docm1 from "../../assets/images/docm1.png";
+import docm2 from "../../assets/images/doctor1.jpeg";
+// import loginImage from "../../assets/images/login.png";
 
 function Home() {
-    const [professionals, setProfessionals] = useState([]);
+    const profiles = [
+        {
+            name: "Shradha Gadtaula",
+            location: "Bhaktapur, Kathmandu, Lalitpur",
+            profession: "Psychologist",
+            imageUrl: docf1, 
+            testimonial: "This website is an amazing platform where I have helped numerous patients find peace and mental well-being."
+        },
+        {
+            name: "Dr. Pashupati Mahat",
+            location: "Kathmandu",
+            profession: "Clinical Psychologist",
+            imageUrl: docf2, 
+            testimonial: "Mental health is just as important as physical health. This platform allows me to reach and support those in need."
 
-    useEffect(() => {
-        const fetchRandomDoctors = async () => {
-            try {
-                const response = await fetch("http://localhost:4000/doctors/random-doctors");
-                const data = await response.json();
-                setProfessionals(data.doctors || []); // Assuming backend returns { doctors: [] }
-            } catch (error) {
-                console.error("Failed to fetch doctors:", error);
-            }
-        };
+        },
+        {
+            name: "Subhash Chandra Sharma",
+            location: "Kathmandu",
+            profession: "Clinical Psychologist",
+            imageUrl: docm1, 
+            testimonial: "I appreciate how this platform connects professionals with people who require immediate psychological support."
 
-        fetchRandomDoctors();
-    }, []);
+        },
+        {
+            name: "Rabindra Basnet",
+            location: "Kathmandu",
+            profession: "Psychologist",
+            imageUrl: docm2, 
+            testimonial: "Spreading awareness about mental health is crucial, and this website plays a significant role in that mission."
+
+        },
+    ];
 
     return (
         <div>
@@ -29,29 +52,19 @@ function Home() {
 
                 <div>
                     <h1 className="text-3xl font-bold text-center mt-6">Meet Our Professionals</h1>
-                    <div className="flex flex-wrap justify-center gap-6 bg-gray-100 py-8">
-                        {professionals.map((professional) => (
-                            <ProfessionalCard
-                                key={professional._id}
-                                fullname={professional.fullname}
-                                image={professional.image}
-                                specialization={professional.specialization}
-                                qualification={professional.qualification}
-                                experience={professional.experience}
-                            />
-                        ))}
-                    </div>
 
-                    {/* Second section with the same card layout */}
-                    <div className="flex flex-wrap justify-center gap-6 bg-gray-100 py-8">
-                        {professionals.map((professional) => (
-                            <ProfessionalCard
-                                key={professional._id}
-                                name={professional.name}
-                                speciality={professional.speciality}
-                                description={professional.description}
-                                image={professional.image}
-                            />
+                    <div className="flex flex-wrap justify-center space-x-4 mt-6">
+                        {profiles.map((profile, index) => (
+                            <div key={index} className="bg-white p-4 rounded-lg shadow-lg max-w-xs mb-6">
+                                <img className="rounded-lg mb-4 w-full h-48 object-cover" 
+                                     src={profile.imageUrl} 
+                                     alt={profile.name} />
+                                <h2 className="text-xl font-semibold">{profile.name}</h2>
+                                {/* <p className="text-gray-500">{profile.location}</p> */}
+                                <p className="text-gray-700">{profile.profession}</p>
+                                <p className="text-gray-700">{profile.testimonial}</p>
+                                {/* <a href="#" className="text-blue-500 hover:underline">Read More →</a> */}
+                            </div>
                         ))}
                     </div>
 
