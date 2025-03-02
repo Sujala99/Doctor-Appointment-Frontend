@@ -65,13 +65,13 @@ function NavBar() {
             {userRole === "user" && (
               <>
                 <li><Link to="/doctor">Doctor</Link></li>
-                <li><Link to="/message">Chat</Link></li>
+                {/* <li><Link to="/message">Chat</Link></li> */}
               </>
             )}
             {userRole === "doctor" && (
               <>
                 <li><Link to="/appointment">Appointment</Link></li>
-                <li><Link to="/message">Chat</Link></li>
+                {/* <li><Link to="/message">Chat</Link></li> */}
               </>
             )}
             
@@ -106,14 +106,14 @@ function NavBar() {
           {userRole === "user" && (
             <>
               <li><Link to="/doctor">Doctor</Link></li>
-              <li><Link to="/message">Chat</Link></li>
+              {/* <li><Link to="/message">Chat</Link></li> */}
               <li><Link to="/viewappointments">Appointments</Link></li> 
             </>
           )}
           {userRole === "doctor" && (
             <>
               <li><Link to="/doctor/viewAppointment">Appointment</Link></li>
-              <li><Link to="/chat">Chat</Link></li>
+              {/* <li><Link to="/chat">Chat</Link></li> */}
             </>
           )}
 
