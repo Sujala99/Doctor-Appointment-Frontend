@@ -1,69 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { Pie } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
+import axios from "axios";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import Sidebar from "../../../components/sidebar";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 
-function Admin() {
-  const [usersPerMonth, setUsersPerMonth] = useState([]);
-  const [genderDistribution, setGenderDistribution] = useState([]);
+// Register the necessary Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
 
-  useEffect(() => {
-    axios.get('http://localhost:4000/dashboard/users-per-month', { withCredentials: true })
-      .then(res => setUsersPerMonth(res.data))
-      .catch(err => console.log(err));
+const Admin = () => {
+    const [stats, setStats] = useState({
+        patients: 0,
+        doctors: 0,
+        admins: 0,
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    axios.get('http://localhost:4000/dashboard/gender-distribution', { withCredentials: true })
-      .then(res => setGenderDistribution(res.data))
-      .catch(err => console.log(err));
-  }, []);
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const response = await axios.get("http://localhost:4000/dashboard/dashboard/stats");
+                setStats(response.data);
+            } catch (error) {
+                setError("Error fetching stats");
+                console.error("Error fetching stats", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
 
-  const barChartData = usersPerMonth.map(item => ({
-    month: `Month ${item._id}`,
-    users: item.count
-  }));
+    // Pie chart data
+    const pieData = {
+        labels: ["Patients", "Doctors", "Admins"],
+        datasets: [
+            {
+                data: [stats.patients, stats.doctors, stats.admins],
+                backgroundColor: ["#36A2EB", "#FF5733", "#FFBD33"],
+            },
+        ],
+    };
 
-  const pieChartData = genderDistribution.map(item => ({
-    name: item._id,
-    value: item.count
-  }));
+    // Bar chart data
+    const barData = {
+        labels: ["Patients", "Doctors", "Admins"],
+        datasets: [
+            {
+                label: "User Count",
+                data: [stats.patients, stats.doctors, stats.admins],
+                backgroundColor: "#FF5733",
+                borderColor: "#FF5733",
+                borderWidth: 1,
+            },
+        ],
+    };
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+    // Loading and error handling
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
 
-  return (
-    <div className="flex flex-col sm:flex-row">
-      <div className="w-full sm:w-3/4 p-4">
-        <h2 className="text-2xl font-bold mb-6">Admin Dashboard - User Statistics</h2>
-        <div className="flex flex-col sm:flex-row gap-4">
-          {/* Bar Chart */}
-          <div className="w-full sm:w-1/2">
-            <h3>Users Registered Per Month</h3>
-            <BarChart width={500} height={300} data={barChartData}>
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="users" fill="#8884d8" />
-            </BarChart>
-          </div>
+    return (
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+            {/* Sidebar */}
+            <div style={{ width: "250px", height: "100vh", backgroundColor: "#333", color: "#fff", padding: "20px", position: "fixed" }}>
+                {/* Sidebar Content */}
+                <Sidebar />
+            </div>
 
-          {/* Pie Chart */}
-          <div className="w-full sm:w-1/2">
-            <h3>Gender Distribution</h3>
-            <PieChart width={300} height={300}>
-              <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100}>
-                {pieChartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-            </PieChart>
-          </div>
+            {/* Main Dashboard Content */}
+            <div style={{ flex: 1, marginLeft: "250px", padding: "20px" }}>
+                <h2>Dashboard</h2>
+
+                {/* Pie Chart */}
+                <div style={{ maxWidth: "400px", marginBottom: "30px" }}>
+                    <h3>User Roles Distribution (Pie Chart)</h3>
+                    <Pie data={pieData} />
+                </div>
+
+                {/* Bar Chart */}
+                <div style={{ maxWidth: "600px", marginBottom: "30px" }}>
+                    <h3>User Roles Count (Bar Graph)</h3>
+                    <Bar data={barData} />
+                </div>
+            </div>
         </div>
-      </div>
-
-      {/* Sidebar */}
-      <Sidebar />
-    </div>
-  );
-}
+    );
+};
 
 export default Admin;
