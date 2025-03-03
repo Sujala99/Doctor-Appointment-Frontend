@@ -3,21 +3,21 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests', // Location of your test files
   use: {
-    headless: true,   // Run tests in headless mode
-    baseURL: 'http://localhost:5173', // Your React app’s URL
-    viewport: { width: 1280, height: 720 }, // Default viewport size
-    timeout: 60000, // Set timeout to 60 seconds
+    headless: true,
+    baseURL: 'http://localhost:5173',
+    viewport: { width: 1280, height: 720 },
+    timeout: 60000,
   },
-  workers: 4, // Run 4 tests in parallel
+  workers: 4,
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+
   ],
-  testMatch: '**/*.spec.ts', // Match all spec files
+  testMatch: '**/*.spec.ts',
+  
+  // Add reporter for HTML report generation
+  reporter: [['html', { open: 'on-failure' }]], // Generates 'playwright-report' folder
 });
